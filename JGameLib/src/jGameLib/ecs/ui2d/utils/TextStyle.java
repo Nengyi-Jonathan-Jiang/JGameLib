@@ -6,84 +6,53 @@ import java.awt.*;
  * @noinspection unused
  */
 public final class TextStyle {
-    public static class TextAlign {
-        public static final int ALIGN_LEFT = 0;
-        public static final int ALIGN_HORIZONTAL = 2;
-        public static final int ALIGN_RIGHT = 3;
-        public static final int ALIGN_TOP = 0;
-        public static final int ALIGN_VERTICAL = 8;
-        public static final int ALIGN_BOTTOM = 12;
-        public static final int ALIGN_CENTER = 10;
+    public enum TextAlign {
+        ALIGN_TOP_LEFT(Alignment.START, Alignment.START),
+        ALIGN_TOP_CENTER(Alignment.START, Alignment.CENTER),
+        ALIGN_TOP_RIGHT(Alignment.START, Alignment.END),
+        ALIGN_CENTER_LEFT(Alignment.CENTER, Alignment.START),
+        ALIGN_CENTER(Alignment.CENTER, Alignment.CENTER),
+        ALIGN_CENTER_RIGHT(Alignment.CENTER, Alignment.END),
+        ALIGN_BOTTOM_LEFT(Alignment.END, Alignment.START),
+        ALIGN_BOTTOM_CENTER(Alignment.END, Alignment.CENTER),
+        ALIGN_BOTTOM_RIGHT(Alignment.END, Alignment.END);
+
+        final Alignment v_align, h_align;
+
+        TextAlign(Alignment v_align, Alignment h_align) {
+            this.v_align = v_align;
+            this.h_align = h_align;
+        }
     }
 
     private static final Font DEFAULT_FONT = new Font("Times New Roman", Font.PLAIN, 12);
     private static final Color DEFAULT_FG_COLOR = Color.BLACK;
     private static final Color DEFAULT_BG_COLOR = new Color(0, 0, 0, 0);
-    private static final int DEFAULT_ALIGNMENT = TextAlign.ALIGN_LEFT | TextAlign.ALIGN_TOP;
+    private static final TextAlign DEFAULT_ALIGNMENT = TextAlign.ALIGN_TOP_LEFT;
 
     public final Font font;
-    public final int alignment;
+    public final TextAlign alignment;
     public final Color fg_color;
     public final Color bg_color;
 
-    public TextStyle() {
-        this(DEFAULT_FONT);
-    }
-
-    public TextStyle(Font font) {
-        this(font, DEFAULT_ALIGNMENT);
-    }
-
-    public TextStyle(Color fg_color) {
-        this(DEFAULT_FONT, fg_color);
-    }
-
-    public TextStyle(int alignment) {
-        this(DEFAULT_FONT, alignment);
-    }
-
-    public TextStyle(Color fg_color, int alignment) {
-        this(DEFAULT_FONT, fg_color, alignment);
-    }
-
-    public TextStyle(Font font, int alignment) {
-        this(font, DEFAULT_FG_COLOR, alignment);
-    }
-
-    public TextStyle(Font font, Color fg_color) {
-        this(font, fg_color, DEFAULT_ALIGNMENT);
-    }
-
-    public TextStyle(Color fg_color, Color bg_color) {
-        this(DEFAULT_FONT, fg_color, bg_color);
-    }
-
-    public TextStyle(Color fg_color, Color bg_color, int alignment) {
-        this(DEFAULT_FONT, fg_color, bg_color, alignment);
-    }
-
-    public TextStyle(Font font, Color fg_color, Color bg_color) {
-        this(font, fg_color, bg_color, 0);
-    }
-
-    public TextStyle(Font font, Color fg_color, int alignment) {
+    public TextStyle(Font font, Color fg_color, TextAlign alignment) {
         this(font, fg_color, DEFAULT_BG_COLOR, alignment);
     }
 
-    public TextStyle(Font font, Color fg_color, Color bg_color, int alignment) {
+    public TextStyle(Font font, Color fg_color, Color bg_color, TextAlign alignment) {
         this.font = font;
         this.fg_color = fg_color;
         this.bg_color = bg_color;
         this.alignment = alignment;
     }
 
-    public Alignment getHorizontalAlignment() {
-        return (alignment & 2) == 0 ? Alignment.START : (alignment & 1) == 0 ? Alignment.CENTER : Alignment.END;
-    }
+    enum Alignment {
+        START(0), CENTER(0.5), END(1);
 
-    public Alignment getVerticalAlignment() {
-        return (alignment & 8) == 0 ? Alignment.START : (alignment & 4) == 0 ? Alignment.CENTER : Alignment.END;
-    }
+        public final double p;
 
-    public enum Alignment {START, CENTER, END}
+        Alignment(double p) {
+            this.p = p;
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package jGameLib.ecs;
 
+import jGameLib.util.ToStringHelper;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -167,5 +169,19 @@ public abstract class GameState {
      */
     protected boolean isFinished() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() +
+            "{" +
+            ToStringHelper.toMultiLineList(
+                "Entities: [" +
+                    ToStringHelper.toMultiLineList(
+                        entitiesInState.stream()
+                    ) +
+                    "]"
+            ) +
+            "}";
     }
 }

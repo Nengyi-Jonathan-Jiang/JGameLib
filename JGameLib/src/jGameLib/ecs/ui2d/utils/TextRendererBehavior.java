@@ -16,11 +16,11 @@ import java.util.Arrays;
  * @noinspection UnusedReturnValue, unused
  */
 public class TextRendererBehavior extends UIRendererComponent {
-    protected static final TextStyle DEFAULT_STYLE = new TextStyle();
+    protected static final TextStyle DEFAULT_STYLE = new TextStyleBuilder().get();
     protected TextStyle style;
     protected String text;
     protected String[] lines;
-    protected double[] lineY;
+    protected Vec2[] lineOffset;
     protected TextLayout[] lineLayouts;
     private Vec2 textOffset;
     private Vec2 renderedSize;
@@ -31,10 +31,6 @@ public class TextRendererBehavior extends UIRendererComponent {
 
     public TextRendererBehavior(String text) {
         this(text, DEFAULT_STYLE);
-    }
-
-    public TextRendererBehavior(String text, Font font) {
-        this(text, new TextStyle(font));
     }
 
     public TextRendererBehavior(String text, TextStyle style) {
@@ -59,9 +55,10 @@ public class TextRendererBehavior extends UIRendererComponent {
         this.lines = text.isEmpty() ? new String[]{} : text.split("\n");
     }
 
-    public void setStyle(TextStyle style) {
+    public TextRendererBehavior setStyle(TextStyle style) {
         setStyleNoCalculateBounds(style);
         recalculateBounds();
+        return this;
     }
 
     private void setStyleNoCalculateBounds(TextStyle style) {
@@ -99,58 +96,61 @@ public class TextRendererBehavior extends UIRendererComponent {
     }
 
     private void recalculateBounds() {
-
         FontRenderContext context = _graphics.getFontRenderContext();
 
-        lineLayouts = Arrays.stream(lines).map(i -> new TextLayout(i, style.font, context)).toArray(TextLayout[]::new);
+        lineLayouts = Arrays.stream(lines).map(
+            i -> new TextLayout(i, style.font, context)
+        ).toArray(TextLayout[]::new);
 
         double width = 0, height = 0;
-        lineY = new double[lines.length];
+        lineOffset = new Vec2[lines.length];
         for (int i = 0; i < lines.length; i++) {
-            TextLayout txt = new TextLayout(lines[i], style.font, context);
+            TextLayout txt = lineLayouts[i];
             Rectangle2D size = txt.getBounds();
 
             width = Math.max(width, size.getWidth());
             height += size.getHeight() * (i == 0 ? 1 : 1.2);
-            lineY[i] = height;
+            lineOffset[i] = new Vec2(-size.getX(), height - size.getMaxY());
         }
-        renderedSize = new Vec2(width, height);
 
+        renderedSize = new Vec2(width, height);
         textOffset = new Vec2(
-            switch (style.getHorizontalAlignment()) {
-                case START -> 0;
-                case CENTER -> .5;
-                case END -> 1;
-            },
-            switch (style.getVerticalAlignment()) {
-                case START -> 0;
-                case CENTER -> .5;
-                case END -> 1;
-            }
-        ).times(getRenderedSize());
+            style.alignment.h_align.p,
+            style.alignment.v_align.p
+        ).times(renderedSize);
     }
 
     @Override
     public void draw(JGraphics graphics) {
-        Vec2 rect_start = entity.getComponent(BoundingBoxComponent.class).getAbsoluteTopLeft();
-        Vec2 text_start = rect_start.minus(textOffset).plus(new Vec2(
-            switch (style.getHorizontalAlignment()) {
-                case START -> 0;
-                case CENTER -> entity.getComponent(BoundingBoxComponent.class).getSize().x() * 0.5;
-                case END -> entity.getComponent(BoundingBoxComponent.class).getSize().x();
-            },
-            switch (style.getVerticalAlignment()) {
-                case START -> 0;
-                case CENTER -> entity.getComponent(BoundingBoxComponent.class).getSize().y() * 0.5;
-                case END -> entity.getComponent(BoundingBoxComponent.class).getSize().y();
-            })
+        Vec2 rect_start = boundingBox.getAbsoluteTopLeft().plus(
+            boundingBox.getSize().times(
+                style.alignment.h_align.p,
+                style.alignment.v_align.p
+            )
         );
+        Vec2 text_start = rect_start.minus(textOffset);
+
+        // Debugging
+//        graphics.setColor(Color.BLUE).drawRect(text_start, renderedSize);
+//        graphics.setColor(Color.PINK).drawRect(
+//            boundingBox.getAbsoluteTopLeft(),
+//            boundingBox.getSize()
+//        );
 
         graphics.setColor(style.fg_color).setDrawFont(style.font);
         for (int i = 0; i < lines.length; i++) {
-            lineLayouts[i].draw(graphics.originalGraphics(), (float) text_start.x, (float) (text_start.y + lineY[i]));
+            Vec2 line_start = text_start.plus(lineOffset[i]);
+
+            lineLayouts[i].draw(
+                graphics.originalGraphics(),
+                (float) line_start.x,
+                (float) line_start.y
+            );
             if (useUnderline) {
-                graphics.drawRect(text_start.plus(new Vec2(0, lineY[i])), new Vec2(getRenderedSize().x, 0));
+                graphics.drawRect(
+                    line_start,
+                    new Vec2(getRenderedSize().x, 0)
+                );
             }
         }
     }

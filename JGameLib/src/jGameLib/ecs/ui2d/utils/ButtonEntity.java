@@ -17,7 +17,13 @@ public class ButtonEntity extends UIEntity {
 
     public ButtonEntity(String text, Font font, Color background, Color border, Color textColor) {
         textRendererComponent.setText(text);
-        textRendererComponent.setStyle(new TextStyle(font, textColor, TextStyle.TextAlign.ALIGN_CENTER));
+        textRendererComponent.setStyle(
+            new TextStyleBuilder()
+                .setFont(font)
+                .setFgColor(textColor)
+                .setAlignment(TextStyle.TextAlign.ALIGN_CENTER)
+                .get()
+        );
 
         var thiz = this;
 

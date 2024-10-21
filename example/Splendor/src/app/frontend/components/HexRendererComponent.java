@@ -1,37 +1,38 @@
-package jGameLib.ecs.ui2d.utils;
+package app.frontend.components;
 
 import jGameLib.ecs.ui2d.JGraphics;
+import jGameLib.ecs.ui2d.utils.CachedRendererBehavior;
 import jGameLib.math.Vec2;
 import jGameLib.util.Pair;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
 
-public class HexRendererBehavior extends CachedRendererBehavior<Pair<Color, Color>> {
+public class HexRendererComponent extends CachedRendererBehavior<Pair<Color, Color>> {
     protected final static Color DEFAULT_BORDER_COLOR = Color.BLACK;
     protected final static Color DEFAULT_FILL_COLOR = new Color(0, 0, 0, 0);
     protected Color border_color;
     protected Color fill_color;
 
-    public HexRendererBehavior() {
+    public HexRendererComponent() {
         this(DEFAULT_BORDER_COLOR);
     }
 
-    public HexRendererBehavior(Color border_color) {
+    public HexRendererComponent(Color border_color) {
         this(border_color, DEFAULT_FILL_COLOR);
     }
 
-    public HexRendererBehavior(Color border_color, Color fill_color) {
+    public HexRendererComponent(Color border_color, Color fill_color) {
         this.border_color = border_color;
         this.fill_color = fill_color;
     }
 
-    public HexRendererBehavior setBorderColor(Color color) {
+    public HexRendererComponent setBorderColor(Color color) {
         border_color = color;
         return this;
     }
 
-    public HexRendererBehavior setFillColor(Color color) {
+    public HexRendererComponent setFillColor(Color color) {
         fill_color = color;
         return this;
     }

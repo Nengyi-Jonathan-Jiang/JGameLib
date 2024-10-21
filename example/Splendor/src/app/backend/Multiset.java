@@ -7,7 +7,7 @@ import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class Multiset<T> implements Set<T> {
+public class Multiset<T> implements Collection<T> {
     private final Map<T, Integer> backingMap;
     private final Supplier<Map<T, Integer>> backingMapSupplier;
 

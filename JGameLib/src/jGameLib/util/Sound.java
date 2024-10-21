@@ -7,12 +7,11 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Basic class representing a playable sound. Sounds can be played at the same time.
  */
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public class Sound {
     private static class SoundSource {
         public final byte[] data;
@@ -53,31 +52,29 @@ public class Sound {
         }
     }
 
-    private final static Map<String, SoundSource> sources = new HashMap<>();
+    private final static Cache<String, SoundSource> sources = new Cache<>();
 
     private static Clip getClip(String filename) {
-        SoundSource source;
-
         try {
-            if (sources.containsKey(filename)) source = sources.get(filename);
-            else {
+            var source = sources.getOrCompute(filename, () -> {
                 try (InputStream inputStream = Sound.class.getResourceAsStream("/" + filename)) {
                     if (inputStream != null) {
                         var bufferedInputStream = new BufferedInputStream(inputStream);
                         var audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
-                        source = new SoundSource(audioInputStream);
-
-                        sources.put(filename, source);
+                        return new SoundSource(audioInputStream);
                     } else {
                         throw new IOException("Null input stream");
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
                 }
-            }
+            });
 
             return source == null ? null : source.createClip();
         } catch (Exception e) {
             e.printStackTrace();
-            sources.put(filename, null);
+            sources.forcePutValue(filename, null);
             return null;
         }
     }
@@ -88,6 +85,7 @@ public class Sound {
     /**
      * Loads a sound, given the file name. <br>
      * WARNING: This is an expensive operation.
+     * TODO: check if this is expensive
      */
     public Sound(String fileName) {
         this(getClip(fileName));
@@ -104,8 +102,7 @@ public class Sound {
     }
 
     /**
-     * A sound representing silence. Used internally by
-     * the game engine, for the most part.
+     * A sound representing silence.
      */
     public static final Sound SILENCE = new Sound((Clip) null);
 

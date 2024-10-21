@@ -3,14 +3,13 @@ package jGameLib.ecs.ui2d.utils;
 import jGameLib.ecs.Entity;
 import jGameLib.ecs.ui2d.rendering.BoundingBoxComponent;
 
-import java.awt.*;
 import java.util.function.Consumer;
 
 public class TextEntity extends Entity {
     private final TextRendererBehavior textRenderer;
 
-    public TextEntity(String text, Font font, Color textColor, int alignment) {
-        addComponent(textRenderer = new TextRendererBehavior(text, new TextStyle(font, textColor, alignment)));
+    public TextEntity(String text, TextStyle textStyle) {
+        addComponent(textRenderer = new TextRendererBehavior(text, textStyle));
     }
 
     public TextEntity resizeToFitH(double padding) {

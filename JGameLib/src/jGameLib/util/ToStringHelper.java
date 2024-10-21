@@ -1,5 +1,6 @@
 package jGameLib.util;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,6 +19,10 @@ public class ToStringHelper {
             return "";
         }
         return indent(s) + "\n";
+    }
+
+    public static String toMultiLineList(Object... items) {
+        return toMultiLineList(Arrays.stream(items));
     }
 
     public static String indent(String str) {

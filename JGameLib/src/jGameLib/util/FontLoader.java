@@ -7,7 +7,9 @@ import java.io.IOException;
  * Utility class to load fonts
  */
 public final class FontLoader {
-    public static final Font DefaultFont = new Font("Times New Roman", Font.PLAIN, 0);
+    private static final Cache<String, Font> cache = new Cache<>();
+
+    public static final Font DefaultFont = new Font("Times New Roman", Font.PLAIN, 12);
 
     /**
      * Loads a .ttf font
@@ -15,17 +17,16 @@ public final class FontLoader {
      * @param filename The location of the font file
      */
     public static Font load(String filename) {
-        Font f;
-        try {
-            f = Font.createFont(
-                Font.TRUETYPE_FONT,
-                FileUtil.readFileAsStream(filename)
-            );
-        } catch (FontFormatException | IOException e) {
-            //noinspection CallToPrintStackTrace
-            e.printStackTrace();
-            f = DefaultFont;
-        }
-        return f;
+        return cache.getOrCompute(filename, () -> {
+            try {
+                return Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    FileUtil.readFileAsStream(filename)
+                ).deriveFont(Font.PLAIN, 12);
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+                return DefaultFont;
+            }
+        });
     }
 }

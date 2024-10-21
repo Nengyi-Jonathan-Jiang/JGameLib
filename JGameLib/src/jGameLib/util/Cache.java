@@ -33,7 +33,7 @@ public class Cache<K, V> {
         return backingMap.get(key);
     }
 
-    public void updateValue(K key, V value) {
+    public void forcePutValue(K key, V value) {
         backingMap.put(key, value);
     }
 }

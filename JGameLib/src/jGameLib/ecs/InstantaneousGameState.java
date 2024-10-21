@@ -1,26 +1,30 @@
 package jGameLib.ecs;
 
 /**
- * Extend this class when your intention is to make an instant state executing a single action as its body
+ * A {@link GameState} that executes a single action. No entities should be made in the game state
  */
 public abstract class InstantaneousGameState extends GameState {
     @Override
-    public final void onUpdate() {
+    protected final void onUpdate() {
     }
 
     @Override
-    public final void onExecutionEnd() {
+    protected final void onSchedule() {
     }
 
     @Override
-    public final void onExecutionStart() {
+    protected final void onExecutionEnd() {
+    }
+
+    @Override
+    protected final void onExecutionStart() {
         execute();
     }
 
     @Override
-    public final boolean isFinished() {
+    protected final boolean isFinished() {
         return true;
     }
 
-    public abstract void execute();
+    protected abstract void execute();
 }
