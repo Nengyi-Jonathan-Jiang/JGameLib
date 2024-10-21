@@ -1,0 +1,26 @@
+package jGameLib.util;
+
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class ToStringHelper {
+    private ToStringHelper() {
+    }
+
+    public static <T> String toSingleLineList(Stream<T> items) {
+        return items.map(Objects::toString).collect(Collectors.joining(", "));
+    }
+
+    public static <T> String toMultiLineList(Stream<T> items) {
+        String s = "\n" + items.map(Objects::toString).collect(Collectors.joining(", \n"));
+        if (s.equals("\n")) {
+            return "";
+        }
+        return indent(s) + "\n";
+    }
+
+    public static String indent(String str) {
+        return str.replace("\n", "\n    ");
+    }
+}
