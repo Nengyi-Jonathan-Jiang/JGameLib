@@ -6,7 +6,7 @@ import jGameLib.util.ImageLoader;
 import java.awt.*;
 
 public class ImageEntity extends UIEntity {
-    private final ImageRendererBehavior imageRendererBehavior;
+    private final ImageRendererComponent imageRendererComponent;
 
     public ImageEntity(String filename) {
         this(ImageLoader.get(filename));
@@ -14,10 +14,10 @@ public class ImageEntity extends UIEntity {
 
     public ImageEntity(Image image) {
         super();
-        addComponent(imageRendererBehavior = new ImageRendererBehavior(image));
+        addComponent(imageRendererComponent = new ImageRendererComponent(image));
     }
 
     public Image getImage() {
-        return imageRendererBehavior.getImage();
+        return imageRendererComponent.getImage();
     }
 }

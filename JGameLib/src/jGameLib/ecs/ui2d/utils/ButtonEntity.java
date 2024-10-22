@@ -15,15 +15,9 @@ public class ButtonEntity extends UIEntity {
 
     private final List<ButtonClickListener> clickListeners = new ArrayList<>();
 
-    public ButtonEntity(String text, Font font, Color background, Color border, Color textColor) {
+    public ButtonEntity(String text, Color background, Color border, TextStyle style) {
         textRendererComponent.setText(text);
-        textRendererComponent.setStyle(
-            new TextStyleBuilder()
-                .setFont(font)
-                .setFgColor(textColor)
-                .setAlignment(TextStyle.TextAlign.ALIGN_CENTER)
-                .get()
-        );
+        textRendererComponent.setStyle(style);
 
         var thiz = this;
 
@@ -40,7 +34,7 @@ public class ButtonEntity extends UIEntity {
                     clickListeners.forEach(i -> i.execute(thiz, me));
                 }
             },
-            new RoundedRectRendererBehavior(20, border, background),
+            new RoundedRectRendererComponent(20, border, background),
             textRendererComponent,
             hoverDetectionComponent
         );

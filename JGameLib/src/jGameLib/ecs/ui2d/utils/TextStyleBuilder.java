@@ -6,13 +6,21 @@ public class TextStyleBuilder {
 
     private static final Font DEFAULT_FONT = new Font("Times New Roman", Font.PLAIN, 12);
     private static final Color DEFAULT_FG_COLOR = Color.BLACK;
-    private static final Color DEFAULT_BG_COLOR = new Color(0, 0, 0, 0);
     private static final TextStyle.TextAlign DEFAULT_ALIGNMENT = TextStyle.TextAlign.ALIGN_TOP_LEFT;
 
     public Font font = DEFAULT_FONT;
     public TextStyle.TextAlign alignment = DEFAULT_ALIGNMENT;
-    public Color fg_color = DEFAULT_FG_COLOR;
-    public Color bgColor = DEFAULT_BG_COLOR;
+    public Color color = DEFAULT_FG_COLOR;
+
+    public TextStyleBuilder() {
+
+    }
+
+    public TextStyleBuilder(TextStyle style) {
+        this.font = style.font;
+        this.alignment = style.alignment;
+        this.color = style.color;
+    }
 
     public TextStyleBuilder setFont(Font font) {
         this.font = font;
@@ -24,17 +32,12 @@ public class TextStyleBuilder {
         return this;
     }
 
-    public TextStyleBuilder setBgColor(Color bgColor) {
-        this.bgColor = bgColor;
-        return this;
-    }
-
-    public TextStyleBuilder setFgColor(Color fgColor) {
-        this.fg_color = fgColor;
+    public TextStyleBuilder setColor(Color color) {
+        this.color = color;
         return this;
     }
 
     public TextStyle get() {
-        return new TextStyle(font, fg_color, bgColor, alignment);
+        return new TextStyle(font, color, alignment);
     }
 }

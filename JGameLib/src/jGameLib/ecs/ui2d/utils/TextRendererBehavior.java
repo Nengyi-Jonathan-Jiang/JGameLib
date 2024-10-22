@@ -137,7 +137,7 @@ public class TextRendererBehavior extends UIRendererComponent {
 //            boundingBox.getSize()
 //        );
 
-        graphics.setColor(style.fg_color).setDrawFont(style.font);
+        graphics.setColor(style.color).setDrawFont(style.font);
         for (int i = 0; i < lines.length; i++) {
             Vec2 line_start = text_start.plus(lineOffset[i]);
 
@@ -147,9 +147,12 @@ public class TextRendererBehavior extends UIRendererComponent {
                 (float) line_start.y
             );
             if (useUnderline) {
-                graphics.drawRect(
-                    line_start,
-                    new Vec2(getRenderedSize().x, 0)
+                // Since the line height is comparable to the stroke width of 2px, we use fillRect to have precise
+                // control over size
+                graphics.fillRect(
+                    // Add a bit of offset to make it look nicer
+                    line_start.plus(0, 1),
+                    new Vec2(getRenderedSize().x, 1)
                 );
             }
         }

@@ -9,36 +9,36 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 @SuppressWarnings("unused")
-public class RoundedRectRendererBehavior extends CachedRendererBehavior<Pair<Pair<Double, Color>, Color>> {
-    protected final static Color DEFAULT_BORDER_COLOR = Color.BLACK;
-    protected final static Color DEFAULT_FILL_COLOR = new Color(0, 0, 0, 0);
-    protected Color border_color;
-    protected Color fill_color;
+//public class RoundedRectRendererBehavior extends CachedRendererBehavior<Pair<Pair<Double, Color>, Color>> {
+public class RoundedRectRendererComponent
+    extends RectRendererComponent
+    implements CacheableRendererComponent<Pair<Pair<Double, Color>, Color>> {
+
     protected double radius;
 
-    public RoundedRectRendererBehavior(double radius, Color border_color, Color fill_color) {
+    public RoundedRectRendererComponent(double radius, Color border_color, Color fill_color) {
         this.border_color = border_color;
         this.fill_color = fill_color;
         this.radius = radius;
     }
 
-    public RoundedRectRendererBehavior setBorderColor(Color color) {
+    public RoundedRectRendererComponent setBorderColor(Color color) {
         border_color = color;
         return this;
     }
 
-    public RoundedRectRendererBehavior setFillColor(Color color) {
+    public RoundedRectRendererComponent setFillColor(Color color) {
         fill_color = color;
         return this;
     }
 
-    public RoundedRectRendererBehavior setRadius(double radius) {
+    public RoundedRectRendererComponent setRadius(double radius) {
         this.radius = radius;
         return this;
     }
 
     @Override
-    protected void draw(Vec2 size, JGraphics graphics) {
+    public void drawToCachedImage(Vec2 size, JGraphics graphics) {
         var shape = new RoundRectangle2D.Double(
             -boundingBox.getSize().x / 2,
             -boundingBox.getSize().y / 2,
@@ -57,13 +57,18 @@ public class RoundedRectRendererBehavior extends CachedRendererBehavior<Pair<Pai
     }
 
     @Override
-    protected Pair<Pair<Double, Color>, Color> getCacheKey() {
+    public Pair<Pair<Double, Color>, Color> getCacheKey() {
         return new Pair<>(new Pair<>(radius, fill_color), border_color);
     }
 
     @Override
-    protected Vec2i getCacheImageSize() {
+    public Vec2i getCacheImageSize() {
         // Need some extra space for the border
         return new Vec2i(boundingBox.getSize().plus(4, 4));
+    }
+
+    @Override
+    public void draw(JGraphics graphics) {
+        CacheableRendererComponent.draw(this, graphics);
     }
 }

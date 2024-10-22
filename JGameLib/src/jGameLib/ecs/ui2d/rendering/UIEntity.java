@@ -6,7 +6,7 @@ import jGameLib.math.Vec2;
 import java.util.function.Consumer;
 
 @SuppressWarnings("UnusedReturnValue")
-public class UIEntity extends Entity {
+public class UIEntity extends Entity implements HasBoundingBox {
     public final BoundingBoxComponent boundingBox;
 
     public UIEntity() {
@@ -22,12 +22,13 @@ public class UIEntity extends Entity {
         addComponent(boundingBox = new BoundingBoxComponent(position, size));
     }
 
+    @Override
     public final BoundingBoxComponent getBoundingBox() {
         return boundingBox;
     }
 
+    @Override
     public final UIEntity withBoundingBox(Consumer<BoundingBoxComponent> action) {
-        action.accept(getBoundingBox());
-        return this;
+        return (UIEntity) HasBoundingBox.super.withBoundingBox(action);
     }
 }

@@ -6,10 +6,12 @@ import app.backend.Gem;
 import app.backend.Multiset;
 import app.frontend.CardEntity;
 import app.frontend.GemEntity;
-import jGameLib.ecs.ui2d.rendering.BoundingBoxComponent;
 import jGameLib.ecs.ui2d.rendering.UIEntity;
 import jGameLib.ecs.ui2d.rendering.UIRendererRootComponent;
-import jGameLib.ecs.ui2d.utils.RectRendererBehavior;
+import jGameLib.ecs.ui2d.utils.ButtonEntity;
+import jGameLib.ecs.ui2d.utils.RectRendererComponent;
+import jGameLib.ecs.ui2d.utils.TextStyle;
+import jGameLib.ecs.ui2d.utils.TextStyleBuilder;
 
 import java.awt.*;
 
@@ -17,10 +19,10 @@ public class TitleState extends BasicState {
     public TitleState() {
         new UIEntity()
             .withBoundingBox(b -> b.setSize(1920, 1080))
-            .addComponent(new RectRendererBehavior(null, Color.WHITE))
+            .addComponent(new RectRendererComponent(null, Color.WHITE))
             .addComponent(new UIRendererRootComponent());
 
-        var v = new GemEntity(Gem.BLACK)
+        new GemEntity(Gem.BLACK)
             .addComponent(new UIRendererRootComponent());
 
         new CardEntity(new Card(

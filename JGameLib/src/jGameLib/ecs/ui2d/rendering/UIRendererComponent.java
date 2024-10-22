@@ -2,10 +2,11 @@ package jGameLib.ecs.ui2d.rendering;
 
 import jGameLib.ecs.Component;
 import jGameLib.ecs.Entity;
-import jGameLib.ecs.ui2d.GameCanvas;
 import jGameLib.ecs.ui2d.JGraphics;
 
-public abstract class UIRendererComponent extends Component {
+import java.util.function.Consumer;
+
+public abstract class UIRendererComponent extends Component implements HasBoundingBox {
     private boolean isEnabled = true;
     protected BoundingBoxComponent boundingBox;
 
@@ -38,5 +39,15 @@ public abstract class UIRendererComponent extends Component {
      */
     public void draw(JGraphics graphics) {
 
+    }
+
+    @Override
+    public final BoundingBoxComponent getBoundingBox() {
+        return boundingBox;
+    }
+
+    @Override
+    public UIRendererComponent withBoundingBox(Consumer<BoundingBoxComponent> action) {
+        return (UIRendererComponent) HasBoundingBox.super.withBoundingBox(action);
     }
 }

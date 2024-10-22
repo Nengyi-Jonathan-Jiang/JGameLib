@@ -10,21 +10,21 @@ import java.awt.*;
  * @noinspection UnusedReturnValue, unused
  */
 @SuppressWarnings("unused")
-public class RectRendererBehavior extends UIRendererComponent {
+public class RectRendererComponent extends UIRendererComponent {
     protected final static Color DEFAULT_BORDER_COLOR = Color.BLACK;
     protected final static Color DEFAULT_FILL_COLOR = new Color(0, 0, 0, 0);
     protected Color border_color;
     protected Color fill_color;
 
-    public RectRendererBehavior() {
+    public RectRendererComponent() {
         this(DEFAULT_BORDER_COLOR);
     }
 
-    public RectRendererBehavior(Color border_color) {
+    public RectRendererComponent(Color border_color) {
         this(border_color, DEFAULT_FILL_COLOR);
     }
 
-    public RectRendererBehavior(Color border_color, Color fill_color) {
+    public RectRendererComponent(Color border_color, Color fill_color) {
         this.border_color = border_color;
         this.fill_color = fill_color;
     }
@@ -44,12 +44,12 @@ public class RectRendererBehavior extends UIRendererComponent {
             );
     }
 
-    public RectRendererBehavior setBorderColor(Color color) {
+    public RectRendererComponent setBorderColor(Color color) {
         border_color = color;
         return this;
     }
 
-    public RectRendererBehavior setFillColor(Color color) {
+    public RectRendererComponent setFillColor(Color color) {
         fill_color = color;
         return this;
     }

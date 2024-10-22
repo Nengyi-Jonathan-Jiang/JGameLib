@@ -32,17 +32,11 @@ public final class TextStyle {
 
     public final Font font;
     public final TextAlign alignment;
-    public final Color fg_color;
-    public final Color bg_color;
+    public final Color color;
 
-    public TextStyle(Font font, Color fg_color, TextAlign alignment) {
-        this(font, fg_color, DEFAULT_BG_COLOR, alignment);
-    }
-
-    public TextStyle(Font font, Color fg_color, Color bg_color, TextAlign alignment) {
+    public TextStyle(Font font, Color color, TextAlign alignment) {
         this.font = font;
-        this.fg_color = fg_color;
-        this.bg_color = bg_color;
+        this.color = color;
         this.alignment = alignment;
     }
 

@@ -14,13 +14,41 @@ import java.awt.*;
 import java.util.Arrays;
 
 public class CardEntity extends UIEntity {
-    public CardEntity(Card card) {
-        boundingBox.setSize(200, 350);
-        addComponent(new RectRendererBehavior(
-            Color.BLACK,
-            new Color(0xeeddcc)
-        ));
+    private final Card card;
 
+    public CardEntity(Card card) {
+        this.card = card;
+        boundingBox.setSize(200, 350);
+        addCardBackgroundEntity();
+        addCardCostEntity();
+        addCardResourceEntity();
+        addCardPrestigeEntity();
+    }
+
+    private void addCardPrestigeEntity() {
+        new UIEntity()
+            .withBoundingBox(b -> boundingBox.addChild(b
+                .setSize(60, 60)
+                .setTopRight(boundingBox.getTopRightOffset().plus(-10, 10))
+            ))
+            .addComponent(new CircleRendererComponent(Color.BLACK, null))
+            .addComponent(new TextRendererBehavior(card.prestige + "", new TextStyleBuilder()
+                .setFont(FontLoader.load("fonts/Nunito.ttf").deriveFont(40f))
+                .setAlignment(TextStyle.TextAlign.ALIGN_CENTER)
+                .get()
+            ));
+    }
+
+    private void addCardResourceEntity() {
+        new UIEntity()
+            .withBoundingBox(b -> boundingBox.addChild(b
+                .setSize(60, 60)
+                .setTopLeft(boundingBox.getTopLeftOffset().plus(10, 10))
+            ))
+            .addComponent(new CircleRendererComponent(null, card.resourceType.getColor()));
+    }
+
+    private void addCardCostEntity() {
         VerticalLayoutEntity v = new VerticalLayoutEntity();
         boundingBox.addChild(v.boundingBox);
 
@@ -28,7 +56,6 @@ public class CardEntity extends UIEntity {
             .map(i -> new Pair<>(i, card.cost(i)))
             .filter(i -> i.b != 0)
             .forEachOrdered((p) -> {
-
                 UIEntity x = new UIEntity(new Vec2(40, 40))
                     .addComponent(new CircleRendererComponent(
                         null, p.a.getColor()
@@ -40,7 +67,7 @@ public class CardEntity extends UIEntity {
                                     .setFont(FontLoader.load("fonts/Nunito.ttf")
                                         .deriveFont(25f)
                                         .deriveFont(Font.BOLD))
-                                    .setFgColor(Color.WHITE)
+                                    .setColor(Color.WHITE)
                                     .setAlignment(TextStyle.TextAlign.ALIGN_CENTER)
                                     .get()
                             )
@@ -56,5 +83,12 @@ public class CardEntity extends UIEntity {
             .applyLayout()
             .boundingBox
             .setBottomLeft(boundingBox.getBottomLeftOffset());
+    }
+
+    private void addCardBackgroundEntity() {
+        addComponent(new RectRendererComponent(
+            Color.BLACK,
+            new Color(0xeeddcc)
+        ));
     }
 }

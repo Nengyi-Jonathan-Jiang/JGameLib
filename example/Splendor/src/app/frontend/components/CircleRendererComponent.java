@@ -1,12 +1,12 @@
 package app.frontend.components;
 
 import jGameLib.ecs.ui2d.JGraphics;
-import jGameLib.ecs.ui2d.utils.RectRendererBehavior;
+import jGameLib.ecs.ui2d.utils.RectRendererComponent;
 import jGameLib.math.Vec2i;
 
 import java.awt.*;
 
-public class CircleRendererComponent extends RectRendererBehavior {
+public class CircleRendererComponent extends RectRendererComponent {
 
     public CircleRendererComponent(Color border_color, Color fill_color) {
         super(border_color, fill_color);

@@ -12,14 +12,14 @@ import java.awt.*;
  * Allows the gameObject to draw an image
  */
 @SuppressWarnings("unused")
-public class ImageRendererBehavior extends UIRendererComponent {
+public class ImageRendererComponent extends UIRendererComponent {
     protected Image image;
 
-    public ImageRendererBehavior(Image image) {
+    public ImageRendererComponent(Image image) {
         this.image = image;
     }
 
-    public ImageRendererBehavior(String image) {
+    public ImageRendererComponent(String image) {
         this(ImageLoader.get(image));
     }
 
