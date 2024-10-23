@@ -4,10 +4,10 @@ import jGameLib.ecs.ui2d.utils.HoverDetectionComponent;
 import jGameLib.math.Vec2;
 
 /**
- * ButtonComponent but culled to a hexagon shape
+ * ButtonComponent but culled to a circle shape
  */
-public class CircleButtonComponent extends HoverDetectionComponent {
-    public CircleButtonComponent() {
+public class CircleHoverDetectionComponent extends HoverDetectionComponent {
+    public CircleHoverDetectionComponent() {
     }
 
     @Override

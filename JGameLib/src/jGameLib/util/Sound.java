@@ -74,7 +74,7 @@ public class Sound {
             return source == null ? null : source.createClip();
         } catch (Exception e) {
             e.printStackTrace();
-            sources.forcePutValue(filename, null);
+            sources.putValue(filename, null);
             return null;
         }
     }

@@ -1,0 +1,8 @@
+jGameLib.ecs
+jGameLib.ecs.audio
+jGameLib.ecs.ui2d
+jGameLib.ecs.ui2d.input
+jGameLib.ecs.ui2d.rendering
+jGameLib.ecs.ui2d.utils
+jGameLib.math
+jGameLib.util

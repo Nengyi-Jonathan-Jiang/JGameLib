@@ -1,52 +1,92 @@
 package app.backend;
 
+import jGameLib.util.FileUtil;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Scanner;
 
 public class CardDeck {
-    public final int faceUpCapacity;
-    private final Map<CardTier, List<Card>> deck = new HashMap<>();
-    public final Map<CardTier, Card[]> faceUpCards = new HashMap<>();
+    public static final int FACE_UP_CAPACITY = 4;
+    public static final int NUM_TIERS = CardTier.values().length;
 
-    public CardDeck(int faceUpCapacity, List<Card> allCards) {
-        this.faceUpCapacity = faceUpCapacity;
+    private static final Card[] allCardsList;
+    static {
+        List<Card> cards = new ArrayList<>();
+        Scanner scan = new Scanner(FileUtil.readFileAsText("cards.txt"));
+        while (scan.hasNext()) {
+            Multiset<Gem> cost = new Multiset<>();
+            Gem resourceType = switch (scan.next()) {
+                case "Black" -> Gem.BLACK;
+                case "Blue" -> Gem.BLUE;
+                case "Green" -> Gem.GREEN;
+                case "Red" -> Gem.RED;
+                case "White" -> Gem.WHITE;
+                default -> throw new RuntimeException("Error reading cards from file");
+            };
+            int prestige = scan.nextInt();
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.BLACK);
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.WHITE);
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.RED);
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.BLUE);
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.GREEN);
+            CardTier tier = CardTier.values()[scan.nextInt() - 1];
 
-        for (CardTier tier : CardTier.values()) {
-            deck.put(tier, new ArrayList<>());
-            faceUpCards.put(tier, new Card[faceUpCapacity]);
+            cards.add(new Card(cost, tier, resourceType, prestige));
         }
 
-        for (Card card : allCards) {
-            deck.get(card.tier).add(card);
+        allCardsList = cards.toArray(Card[]::new);
+    }
+
+    @SuppressWarnings("unchecked")
+    private final List<Card>[] deck = new List[NUM_TIERS];
+    public final Card[][] faceUpCards = new Card[NUM_TIERS][FACE_UP_CAPACITY];
+
+    public CardDeck() {
+        this(List.of(allCardsList));
+    }
+
+    public CardDeck(List<Card> allCards) {
+        for (int i = 0; i < NUM_TIERS; i++) {
+            deck[i] = new ArrayList<>();
+        }
+
+        List<Card> shuffled = new ArrayList<>(allCards);
+        Collections.shuffle(shuffled);
+        for (Card card : shuffled) {
+            deck[card.tier.ordinal()].add(card);
         }
 
         replenishFaceUpCards();
     }
 
     public void replenishFaceUpCards() {
-        for (CardTier tier : CardTier.values()) {
-            Card[] tierCards = faceUpCards.get(tier);
-            List<Card> tierDeck = deck.get(tier);
-            for (int i = 0; i < tierCards.length && !tierDeck.isEmpty(); i++) {
-                if (tierCards[i] == null) {
-                    tierCards[i] = tierDeck.removeLast();
+        for (int i = 0; i < NUM_TIERS; i++) {
+            Card[] tierCards = faceUpCards[i];
+            List<Card> tierDeck = deck[i];
+            for (int j = 0; j < tierCards.length && !tierDeck.isEmpty(); j++) {
+                if (tierCards[j] == null) {
+                    tierCards[j] = tierDeck.removeLast();
                 }
             }
         }
     }
 
     public void removeCard(Card reservedCard) {
-        for (CardTier tier : CardTier.values()) {
-            Card[] tierCards = faceUpCards.get(tier);
-            for (int i = 0; i < tierCards.length; i++) {
-                if (tierCards[i] == reservedCard) {
-                    tierCards[i] = null;
+        for (int i = 0; i < NUM_TIERS; i++) {
+            Card[] tierCards = faceUpCards[i];
+            for (int j = 0; j < tierCards.length; j++) {
+                if (tierCards[j] == reservedCard) {
+                    tierCards[j] = null;
                     return;
                 }
             }
         }
         throw new RuntimeException("Tried to remove card that was not in face up grid");
+    }
+
+    public boolean hasFaceDownCardsInTier(CardTier tier) {
+        return !deck[tier.ordinal()].isEmpty();
     }
 }

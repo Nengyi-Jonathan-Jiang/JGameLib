@@ -1,5 +1,7 @@
 package jGameLib.ecs;
 
+import java.util.Objects;
+
 /**
  * An abstract Component class.
  */
@@ -30,6 +32,10 @@ public abstract class Component {
     protected void onSetEntity(Entity entity) {
     }
 
+    /**
+     * May be overridden to do cleanup when the containing {@link Entity} is {@link Entity#destroy() destroyed}.
+     */
+    protected void onEntityDestroyed() {}
 
     /**
      * Helper method to assert that the entity this component is attached to has an instance of the given component
@@ -48,8 +54,8 @@ public abstract class Component {
      */
     protected final void assertUniqueInEntity(Class<? extends Component> cls) {
         // Ensure that the current class is a subclass of the given class
-        cls.asSubclass(getClass());
-        if (entity.hasComponent(cls)) {
+        getClass().asSubclass(cls);
+        if (entity.getAllComponents(cls).size() != 1) {
             throw new RuntimeException("Entity must have only one of " + cls.getSimpleName());
         }
     }
@@ -58,7 +64,7 @@ public abstract class Component {
      * @return The {@link Entity} that the behavior is attached to
      */
     public final Entity getEntity() {
-        return entity;
+        return Objects.requireNonNull(entity);
     }
 
     @Override

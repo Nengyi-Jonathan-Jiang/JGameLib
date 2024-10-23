@@ -5,8 +5,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * A cache, used to store the results of expensive computations.
+ */
 public class Cache<K, V> {
-    private final Map<K, V> backingMap;
+    protected final Map<K, V> backingMap;
 
     public Cache() {
         this(HashMap::new);
@@ -21,7 +24,7 @@ public class Cache<K, V> {
             return backingMap.get(key);
         }
         V value = computation.get();
-        backingMap.put(key, value);
+        putValue(key, value);
         return value;
     }
 
@@ -33,7 +36,7 @@ public class Cache<K, V> {
         return backingMap.get(key);
     }
 
-    public void forcePutValue(K key, V value) {
+    public void putValue(K key, V value) {
         backingMap.put(key, value);
     }
 }

@@ -1,12 +1,14 @@
 package jGameLib.ecs.ui2d.rendering;
 
+import jGameLib.ecs.GameState;
 import jGameLib.math.Vec2;
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class VerticalLayoutEntity extends UIEntity {
     private Vec2 padding = new Vec2(0);
 
-    public VerticalLayoutEntity() {
+    public VerticalLayoutEntity(GameState state) {
+        super(state);
         addComponent(new UIRendererComponent() {
             @Override
             public void update() {

@@ -23,6 +23,7 @@ import java.util.function.Supplier;
  * To use this, extend the interface and implement its methods, then call the static method
  * {@link CacheableRendererComponent#draw(CacheableRendererComponent, JGraphics)} in the component's
  * {@link UIRendererComponent#draw(JGraphics)} method. For example,
+ * </p>
  *
  * <blockquote><pre>
  * public class ExpensiveRendererComponent extends UIRendererComponent implements CacheableRendererBehavior&lt;Integer&gt; {
@@ -47,7 +48,6 @@ import java.util.function.Supplier;
  *     }
  * }
  * </pre></blockquote>
- * </p>
  */
 public interface CacheableRendererComponent<K> extends HasBoundingBox {
     /**

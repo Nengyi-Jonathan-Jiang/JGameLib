@@ -33,10 +33,10 @@ public class UserInputSystem extends JSystem {
     public UserInputSystem(GameCanvas canvas) {
         this.canvas = canvas;
 
-        canvas.addMouseListener(new MouseAdapter() {
+        canvas.canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
-                Vec2 pos = new Vec2(e.getPoint().x, e.getPoint().y).minus(canvas.getSizeAsVec().times(.5)).times(1 / canvas.getScale());
+                Vec2 pos = new Vec2(e.getPoint().x, e.getPoint().y).minus(canvas.getSize().times(.5)).times(1 / canvas.getScale());
 
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     state.mouseDownL = true;
@@ -50,7 +50,7 @@ public class UserInputSystem extends JSystem {
 
             @Override
             public void mouseReleased(java.awt.event.MouseEvent e) {
-                Vec2 pos = new Vec2(e.getPoint().x, e.getPoint().y).minus(canvas.getSizeAsVec().times(.5)).times(1 / canvas.getScale());
+                Vec2 pos = new Vec2(e.getPoint().x, e.getPoint().y).minus(canvas.getSize().times(.5)).times(1 / canvas.getScale());
 
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     state.mouseDownL = false;
@@ -63,7 +63,7 @@ public class UserInputSystem extends JSystem {
             }
         });
 
-        SwingUtilities.getWindowAncestor(canvas).addKeyListener(new KeyAdapter() {
+        SwingUtilities.getWindowAncestor(canvas.canvas).addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
                 if (state.keysDown.add(e.getKeyChar())) {
@@ -79,9 +79,9 @@ public class UserInputSystem extends JSystem {
             }
         });
 
-        SwingUtilities.getWindowAncestor(canvas).addMouseWheelListener(e -> wheelMovement += e.getWheelRotation());
+        SwingUtilities.getWindowAncestor(canvas.canvas).addMouseWheelListener(e -> wheelMovement += e.getWheelRotation());
 
-        SwingUtilities.getWindowAncestor(canvas).addWindowFocusListener(new WindowAdapter() {
+        SwingUtilities.getWindowAncestor(canvas.canvas).addWindowFocusListener(new WindowAdapter() {
             @Override
             public void windowLostFocus(WindowEvent e) {
                 state.keysDown.clear();

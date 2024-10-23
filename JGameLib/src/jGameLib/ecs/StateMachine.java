@@ -1,7 +1,6 @@
 package jGameLib.ecs;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public final class StateMachine {
     private final Stack<Iterator<? extends GameState>> scheduleStack;
@@ -62,7 +61,7 @@ public final class StateMachine {
 
                 if (currentGameState.isFinished()) {
                     // Finish this action
-                    runMethodWithControl(currentGameState, GameState::onExecutionEnd);
+                    currentGameState.onExecutionEnd();
                     // Remove action from stack
                     stateStack.pop();
 
@@ -95,7 +94,7 @@ public final class StateMachine {
     private void scheduleState(GameState state) {
         stateStack.push(state);
 
-        runMethodWithControl(state, GameState::onExecutionStart);
+        state.onSchedule();
 
         Iterator<? extends GameState> statesBefore = state.getStatesBefore();
         if (statesBefore != null && statesBefore.hasNext()) {
@@ -120,44 +119,34 @@ public final class StateMachine {
 
     private void checkExecutionStart(GameState state) {
         if (state != currentState) {
-            runMethodWithControl(state, GameState::onExecutionStart);
+            state.onExecutionStart();
             currentState = state;
         }
     }
 
     private void executeState(GameState state) {
-        runMethodWithControl(state, GameState::onUpdate);
-        runMethodWithControl(state, this::runSystemsOnState);
+        state.onUpdate();
+        runSystemsOnState(state);
     }
 
     private void runSystemsOnState(GameState state) {
         for (JSystem system : systems) {
             runSystemOnState(state, system);
         }
-        for (JSystem system : state.systems) {
+        for (JSystem system : state.getSystems()) {
             runSystemOnState(state, system);
         }
     }
 
-    private static void runSystemOnState(GameState state, JSystem system) {
+    private void runSystemOnState(GameState state, JSystem system) {
+        List<Entity> entities = state.getEntitiesInState()
+            .stream()
+            .filter(system::canActOn)
+            .toList();
+
         system.applyAction(
-            state.entitiesInState
-                .stream()
-                .filter(system::canActOn)
-                .toList(),
+            entities,
             state
         );
-    }
-
-    /**
-     * Runs a method while giving control to a game state. See {@link Entity#Entity()}
-     */
-    public static void runMethodWithControl(GameState state, Consumer<GameState> method) {
-        synchronized (gameStateWithControlSynchronizer) {
-            var lastGameStateWithControl = gameStateWithControl;
-            gameStateWithControl = state;
-            method.accept(state);
-            gameStateWithControl = lastGameStateWithControl;
-        }
     }
 }

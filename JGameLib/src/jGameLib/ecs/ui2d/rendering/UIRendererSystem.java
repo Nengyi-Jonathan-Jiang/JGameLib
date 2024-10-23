@@ -23,35 +23,45 @@ public class UIRendererSystem extends JSystem {
         return e.hasComponent(UIRendererRootComponent.class);
     }
 
+    private List<UIRendererComponent> updateOrder = new ArrayList<>();
+    private List<UIRendererComponent> drawOrder = new ArrayList<>();
+
     @Override
     public void applyAction(Collection<Entity> entities, GameState currentState) {
-        List<BoundingBoxComponent> boundingBoxes = entities.stream()
-            .map(i -> i.getComponent(BoundingBoxComponent.class))
-            .toList();
+        recalculateProcessingOrders(entities);
 
-        // Update the entities
-        boundingBoxes.forEach(UIRendererSystem::update);
-
-        // Compute the draw order
-        List<UIRendererComponent> drawOrder = new ArrayList<>();
-        addToDrawOrder(boundingBoxes, drawOrder);
+        updateOrder.forEach(UIRendererComponent::update);
 
         // Tell the canvas to redraw itself
-        canvas.repaint((graphics) -> redraw(drawOrder, graphics));
+        canvas.repaint(this::redraw);
     }
 
-    private static void update(BoundingBoxComponent boundingBox) {
+    private void recalculateProcessingOrders(Collection<Entity> entities) {
+        List<BoundingBoxComponent> boundingBoxes = new ArrayList<>();
+        entities.stream()
+            .map(i -> i.getComponent(BoundingBoxComponent.class))
+            .forEach(boundingBoxes::add);
+
+        // Update the entities
+        updateOrder = new ArrayList<>();
+        boundingBoxes.forEach(this::addToUpdateOrder);
+        // Compute the draw order
+        drawOrder = new ArrayList<>();
+        addToDrawOrder(boundingBoxes);
+    }
+
+    private void addToUpdateOrder(BoundingBoxComponent boundingBox) {
         if (boundingBox.getEntity().isEnabled() && boundingBox.isEnabled()) {
             // Update children first
-            boundingBox.getChildren().forEach(UIRendererSystem::update);
+            boundingBox.getChildren().forEach(this::addToUpdateOrder);
             // Update enabled components on self
             boundingBox.getEntity().getAllComponents(UIRendererComponent.class).stream()
                 .filter(UIRendererComponent::isEnabled)
-                .forEach(UIRendererComponent::update);
+                .forEach(updateOrder::add);
         }
     }
 
-    private static void addToDrawOrder(List<BoundingBoxComponent> boundingBoxes, List<UIRendererComponent> result) {
+    private void addToDrawOrder(List<BoundingBoxComponent> boundingBoxes) {
         List<BoundingBoxComponent> b = new ArrayList<>(boundingBoxes);
         // Sort by render order
         b.sort(Comparator.comparingDouble(BoundingBoxComponent::getRenderOrder));
@@ -63,13 +73,13 @@ public class UIRendererSystem extends JSystem {
                 // Add own renderer components to draw order
                 boundingBox.getEntity().getAllComponents(UIRendererComponent.class).stream()
                     .filter(UIRendererComponent::isEnabled)
-                    .forEach(result::add);
+                    .forEach(drawOrder::add);
                 // Add children to draw order
-                addToDrawOrder(boundingBox.getChildren(), result);
+                addToDrawOrder(boundingBox.getChildren());
             });
     }
 
-    private void redraw(List<UIRendererComponent> components, JGraphics graphics) {
-        components.forEach(component -> component.draw(graphics));
+    private void redraw(JGraphics graphics) {
+        drawOrder.forEach(component -> component.draw(graphics));
     }
 }

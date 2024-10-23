@@ -1,6 +1,7 @@
 package jGameLib.ecs.ui2d.rendering;
 
 import jGameLib.ecs.Entity;
+import jGameLib.ecs.GameState;
 import jGameLib.math.Vec2;
 
 import java.util.function.Consumer;
@@ -9,16 +10,16 @@ import java.util.function.Consumer;
 public class UIEntity extends Entity implements HasBoundingBox {
     public final BoundingBoxComponent boundingBox;
 
-    public UIEntity() {
-        this(Vec2.zero);
+    public UIEntity(GameState state) {
+        this(state, Vec2.zero);
     }
 
-    public UIEntity(Vec2 size) {
-        this(Vec2.zero, size);
+    public UIEntity(GameState state, Vec2 size) {
+        this(state, size, Vec2.zero);
     }
 
-    public UIEntity(Vec2 position, Vec2 size) {
-        super();
+    public UIEntity(GameState state, Vec2 size, Vec2 position) {
+        super(state);
         addComponent(boundingBox = new BoundingBoxComponent(position, size));
     }
 

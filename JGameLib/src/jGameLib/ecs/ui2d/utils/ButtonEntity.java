@@ -1,5 +1,6 @@
 package jGameLib.ecs.ui2d.utils;
 
+import jGameLib.ecs.GameState;
 import jGameLib.ecs.ui2d.input.MouseEvent;
 import jGameLib.ecs.ui2d.input.UserInputHandlerComponent;
 import jGameLib.ecs.ui2d.input.UserInputState;
@@ -10,12 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ButtonEntity extends UIEntity {
-    public final TextRendererBehavior textRendererComponent = new TextRendererBehavior("");
+    public final TextRendererComponent textRendererComponent = new TextRendererComponent("");
     public final HoverDetectionComponent hoverDetectionComponent = new HoverDetectionComponent();
 
     private final List<ButtonClickListener> clickListeners = new ArrayList<>();
 
-    public ButtonEntity(String text, Color background, Color border, TextStyle style) {
+    public ButtonEntity(GameState state, String text, Color background, Color border, TextStyle style) {
+        super(state);
         textRendererComponent.setText(text);
         textRendererComponent.setStyle(style);
 
@@ -25,7 +27,7 @@ public class ButtonEntity extends UIEntity {
             new UserInputHandlerComponent() {
                 @Override
                 protected void update(UserInputState state) {
-                    getComponent(TextRendererBehavior.class)
+                    getComponent(TextRendererComponent.class)
                         .setUnderlined(isHovered(state));
                 }
 

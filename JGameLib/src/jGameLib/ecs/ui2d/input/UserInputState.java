@@ -5,9 +5,7 @@ import jGameLib.math.Vec2;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * @noinspection unused
- */
+@SuppressWarnings("unused")
 public class UserInputState {
     final Set<Character> keysDown = new TreeSet<>();
     Vec2 mousePosition = Vec2.zero;

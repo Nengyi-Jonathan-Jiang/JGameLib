@@ -19,7 +19,8 @@ public class HoverDetectionComponent extends Component {
 
     @Override
     protected void onSetEntity(Entity entity) {
-        boundingBox = entity.getComponent(BoundingBoxComponent.class);
+        assertUniqueInEntity(HoverDetectionComponent.class);
+        boundingBox = assertEntityHasComponent(BoundingBoxComponent.class);
     }
 
     /**

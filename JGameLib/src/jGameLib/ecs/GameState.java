@@ -11,8 +11,24 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused")
 public abstract class GameState {
-    final Set<Entity> entitiesInState = new LinkedHashSet<>();
-    final List<JSystem> systems = new ArrayList<>();
+    private final Set<Entity> entitiesInState = new LinkedHashSet<>();
+    private final List<JSystem> systems = new ArrayList<>();
+
+    void addEntity(Entity entity) {
+        entitiesInState.add(entity);
+    }
+
+    void removeEntity(Entity entity) {
+        entitiesInState.remove(entity);
+    }
+
+    Collection<Entity> getEntitiesInState() {
+        return Collections.unmodifiableCollection(entitiesInState);
+    }
+
+    Collection<JSystem> getSystems() {
+        return Collections.unmodifiableCollection(systems);
+    }
 
     /**
      * Constructs a {@link GameState}
@@ -164,8 +180,8 @@ public abstract class GameState {
 
     /**
      * Can be overridden. Returns whether the {@link GameState} has finished executing. When this returns true, the
-     * {@link StateMachine} will not run {@link JSystem JSystems} or {@link GameState#onUpdate()} again. Returns false
-     * by default, meaning that the state will never finish
+     * {@link StateMachine} will not stop executing the state without running {@link JSystem JSystems} or
+     * {@link GameState#onUpdate()}. This method returns false by default, meaning that the state will never finish
      */
     protected boolean isFinished() {
         return false;

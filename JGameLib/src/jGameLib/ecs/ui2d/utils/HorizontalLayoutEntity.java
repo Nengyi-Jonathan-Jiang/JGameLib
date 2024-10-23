@@ -1,5 +1,6 @@
 package jGameLib.ecs.ui2d.utils;
 
+import jGameLib.ecs.GameState;
 import jGameLib.ecs.ui2d.rendering.BoundingBoxComponent;
 import jGameLib.ecs.ui2d.rendering.UIEntity;
 import jGameLib.ecs.ui2d.rendering.UIRendererComponent;
@@ -9,7 +10,8 @@ import jGameLib.math.Vec2;
 public class HorizontalLayoutEntity extends UIEntity {
     private Vec2 padding = new Vec2(0);
 
-    public HorizontalLayoutEntity() {
+    public HorizontalLayoutEntity(GameState state) {
+        super(state);
         addComponent(new UIRendererComponent() {
             @Override
             public void update() {

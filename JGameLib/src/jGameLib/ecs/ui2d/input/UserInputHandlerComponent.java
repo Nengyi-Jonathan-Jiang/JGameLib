@@ -3,6 +3,9 @@ package jGameLib.ecs.ui2d.input;
 import jGameLib.ecs.Component;
 import jGameLib.ecs.Entity;
 
+/**
+ * A component to process user input events given by the {@link UserInputSystem}
+ */
 @SuppressWarnings("unused")
 public abstract class UserInputHandlerComponent extends Component {
     /**

@@ -10,49 +10,25 @@ import java.util.stream.Stream;
 /**
  * Represents an object that has {@link Component Components} and can be acted upon by {@link JSystem JSystems}.
  * Entities stick around forever in a list in their containing state until they are explicitly
- * {@link Entity#destroy() destroyed}.
+ * {@link Entity#destroy()}ed.
  */
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public class Entity {
     private final Map<Class<? extends Component>, List<Component>> componentMap;
     private final List<Component> componentList;
-    private final GameState containingGameState;
+    protected final GameState state;
 
     private boolean isEnabled = true;
 
     /**
-     * Construct an {@link Entity}. Entities must be constructed when their containing
-     * {@link GameState GameState} has control (see below) and is default constructed or explicitly constructed to use
-     * the global state machine in order to be linked to the correct state. If you need to construct an entity
-     * elsewhere, use the {@link Entity#Entity(GameState)} constructor instead.
-     * <p> A game state is said to have control when: <ul>
-     * <li> The constructor or instance initializers are running, and no other threads might construct game states </li>
-     * <li>
-     * {@link GameState#onSchedule()}, {@link GameState#onUpdate()}, {@link GameState#onExecutionStart()},
-     * or {@link GameState#onExecutionEnd()} are running
-     * </li>
-     * <li>
-     * A {@link JSystem} is running on the entities in the state.
-     * </li>
-     * <li>
-     * {@link StateMachine#runMethodWithControl(GameState, Consumer)} is running
-     * </li>
-     * </ul> </p>
-     */
-    public Entity() {
-        this(StateMachine.gameStateWithControl);
-    }
-
-    /**
-     * Construct an {@link Entity} with its containing {@link GameState}. The containing state need not have control,
-     * as opposed to the other constructor {@link Entity#Entity()}
+     * Constructs an Entity with its containing {@link GameState}
      */
     public Entity(GameState state) {
         this.componentMap = new HashMap<>();
         this.componentList = new ArrayList<>();
 
-        state.entitiesInState.add(this);
-        containingGameState = state;
+        state.addEntity(this);
+        this.state = state;
     }
 
     /**
@@ -60,7 +36,8 @@ public class Entity {
      * use this entity again, and the entity will not participate in any {@link JSystem} runs
      */
     public void destroy() {
-        containingGameState.entitiesInState.remove(this);
+        componentList.forEach(Component::onEntityDestroyed);
+        state.removeEntity(this);
     }
 
     /**

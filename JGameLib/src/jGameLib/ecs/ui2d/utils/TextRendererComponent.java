@@ -12,10 +12,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-/**
- * @noinspection UnusedReturnValue, unused
- */
-public class TextRendererBehavior extends UIRendererComponent {
+@SuppressWarnings({"UnusedReturnValue", "unused"})
+public class TextRendererComponent extends UIRendererComponent {
     protected static final TextStyle DEFAULT_STYLE = new TextStyleBuilder().get();
     protected TextStyle style;
     protected String text;
@@ -29,11 +27,11 @@ public class TextRendererBehavior extends UIRendererComponent {
     // Dummy graphics object we use for string size evaluation
     private static final Graphics2D _graphics = (Graphics2D) new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB).getGraphics();
 
-    public TextRendererBehavior(String text) {
+    public TextRendererComponent(String text) {
         this(text, DEFAULT_STYLE);
     }
 
-    public TextRendererBehavior(String text, TextStyle style) {
+    public TextRendererComponent(String text, TextStyle style) {
         setTextNoCalculateBounds(text);
         setStyleNoCalculateBounds(style);
         recalculateBounds();
@@ -43,7 +41,7 @@ public class TextRendererBehavior extends UIRendererComponent {
         return text;
     }
 
-    public TextRendererBehavior setText(String text) {
+    public TextRendererComponent setText(String text) {
         setTextNoCalculateBounds(text);
         recalculateBounds();
         return this;
@@ -55,7 +53,7 @@ public class TextRendererBehavior extends UIRendererComponent {
         this.lines = text.isEmpty() ? new String[]{} : text.split("\n");
     }
 
-    public TextRendererBehavior setStyle(TextStyle style) {
+    public TextRendererComponent setStyle(TextStyle style) {
         setStyleNoCalculateBounds(style);
         recalculateBounds();
         return this;
@@ -69,26 +67,26 @@ public class TextRendererBehavior extends UIRendererComponent {
         return renderedSize;
     }
 
-    public TextRendererBehavior resizeToFit(double padding) {
+    public TextRendererComponent resizeToFit(double padding) {
         entity.getComponent(BoundingBoxComponent.class)
             .setSize(getRenderedSize().plus(new Vec2(padding * 2)));
         return this;
     }
 
-    public TextRendererBehavior resizeWidthToFit(double padding) {
+    public TextRendererComponent resizeWidthToFit(double padding) {
         entity.getComponent(BoundingBoxComponent.class)
             .setWidth(getRenderedSize().x + 2 * padding);
         return this;
     }
 
-    public TextRendererBehavior resizeHeightToFit(double padding) {
+    public TextRendererComponent resizeHeightToFit(double padding) {
         entity.getComponent(BoundingBoxComponent.class)
             .setHeight(getRenderedSize().y + 2 * padding);
         return this;
     }
 
     public Font getFont() {
-        return style.font;
+        return style.font();
     }
 
     public TextStyle getStyle() {
@@ -99,7 +97,7 @@ public class TextRendererBehavior extends UIRendererComponent {
         FontRenderContext context = _graphics.getFontRenderContext();
 
         lineLayouts = Arrays.stream(lines).map(
-            i -> new TextLayout(i, style.font, context)
+            i -> new TextLayout(i, style.font(), context)
         ).toArray(TextLayout[]::new);
 
         double width = 0, height = 0;
@@ -115,8 +113,8 @@ public class TextRendererBehavior extends UIRendererComponent {
 
         renderedSize = new Vec2(width, height);
         textOffset = new Vec2(
-            style.alignment.h_align.p,
-            style.alignment.v_align.p
+            style.alignment().h_align.p,
+            style.alignment().v_align.p
         ).times(renderedSize);
     }
 
@@ -124,20 +122,13 @@ public class TextRendererBehavior extends UIRendererComponent {
     public void draw(JGraphics graphics) {
         Vec2 rect_start = boundingBox.getAbsoluteTopLeft().plus(
             boundingBox.getSize().times(
-                style.alignment.h_align.p,
-                style.alignment.v_align.p
+                style.alignment().h_align.p,
+                style.alignment().v_align.p
             )
         );
         Vec2 text_start = rect_start.minus(textOffset);
 
-        // Debugging
-//        graphics.setColor(Color.BLUE).drawRect(text_start, renderedSize);
-//        graphics.setColor(Color.PINK).drawRect(
-//            boundingBox.getAbsoluteTopLeft(),
-//            boundingBox.getSize()
-//        );
-
-        graphics.setColor(style.color).setDrawFont(style.font);
+        graphics.setColor(style.color()).setDrawFont(style.font());
         for (int i = 0; i < lines.length; i++) {
             Vec2 line_start = text_start.plus(lineOffset[i]);
 

@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 /**
  * A basic class representing a game window.
  */
-public class GameWindow extends JFrame {
+public class GameWindow {
     public final GameCanvas canvas;
 
     /**
@@ -46,37 +46,42 @@ public class GameWindow extends JFrame {
      *                                  but this may not work on some devices.
      */
     public GameWindow(String title, Vec2 minWindowSize, Vec2 referenceWindowResolution) {
-        // Init window
-        setTitle(title);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        // Get window border
-        pack();
-        Vec2 border_size = new Vec2(getSize()).minus(new Vec2(getContentPane().getSize()));
-
-        // Init canvas
         canvas = new GameCanvas(new Vec2i(referenceWindowResolution));
-        add(canvas);
 
-        // Set size
-        setMinimumSize(new Vec2i(minWindowSize.plus(border_size)).toDimension());
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        new JFrame() {
+            {
+                // Init window
+                setTitle(title);
+                setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Set visible
-        setVisible(true);
+                // Get window border
+                pack();
+                Vec2 border_size = new Vec2(getSize()).minus(new Vec2(getContentPane().getSize()));
 
-        // Add key listener
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_F11) {
-                    dispose();
-                    setUndecorated(!isUndecorated());
-                    setVisible(true);
-                    repaint();
-                }
+                // Init canvas
+                add(canvas.canvas);
+
+                // Set size
+                setMinimumSize(new Vec2i(minWindowSize.plus(border_size)).toDimension());
+                setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+                // Set visible
+                setVisible(true);
+
+                // Add key listener
+                addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_F11) {
+                            dispose();
+                            setUndecorated(!isUndecorated());
+                            setVisible(true);
+                            repaint();
+                        }
+                    }
+                });
             }
-        });
+        };
     }
 
     /**

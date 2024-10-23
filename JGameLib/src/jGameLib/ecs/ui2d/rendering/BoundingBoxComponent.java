@@ -1,6 +1,7 @@
 package jGameLib.ecs.ui2d.rendering;
 
 import jGameLib.ecs.Component;
+import jGameLib.ecs.Entity;
 import jGameLib.math.Vec2;
 
 import java.util.ArrayList;
@@ -35,6 +36,16 @@ public final class BoundingBoxComponent extends Component {
     public BoundingBoxComponent(Vec2 relativePosition, Vec2 size) {
         this.relativePosition = relativePosition;
         this.size = size;
+    }
+
+    @Override
+    protected void onEntityDestroyed() {
+        // Remove self from parent
+        if (parent != null) {
+            parent.children.remove(this);
+        }
+        // Automatically destroy children
+        children.stream().map(Component::getEntity).toList().forEach(Entity::destroy);
     }
 
     public void setRenderOrder(int renderOrder) {

@@ -6,10 +6,7 @@ import jGameLib.ecs.ui2d.rendering.UIRendererComponent;
 
 import java.awt.*;
 
-/**
- * @noinspection UnusedReturnValue, unused
- */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public class RectRendererComponent extends UIRendererComponent {
     protected final static Color DEFAULT_BORDER_COLOR = Color.BLACK;
     protected final static Color DEFAULT_FILL_COLOR = new Color(0, 0, 0, 0);
