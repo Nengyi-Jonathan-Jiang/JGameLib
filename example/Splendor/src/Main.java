@@ -1,12 +1,11 @@
 import app.states.TitleState;
-import jGameLib.ecs.StateMachine;
-import jGameLib.ecs.ui2d.GameWindow;
-import jGameLib.ecs.ui2d.input.UserInputSystem;
-import jGameLib.ecs.ui2d.rendering.UIRendererSystem;
-import jGameLib.math.Vec2;
+import jGameLib.core.StateMachine;
+import jGameLib.ui2d.GameWindow;
+import jGameLib.ui2d.input.UserInputSystem;
+import jGameLib.ui2d.rendering.UIRendererSystem;
 
-import static jGameLib.ecs.GameState.makeWhileLoopIterator;
-import static jGameLib.ecs.GameState.toGameState;
+import static jGameLib.core.GameState.makeWhileLoopIterator;
+import static jGameLib.core.GameState.toGameState;
 
 public class Main {
     public static void main(String[] args) {

@@ -3,9 +3,9 @@ package app.frontend;
 import app.backend.Gem;
 import app.frontend.components.CircleHoverDetectionComponent;
 import app.frontend.components.CircleRendererComponent;
-import jGameLib.ecs.GameState;
-import jGameLib.ecs.ui2d.rendering.UIEntity;
-import jGameLib.ecs.ui2d.utils.PositionAnimationComponent;
+import jGameLib.core.GameState;
+import jGameLib.ui2d.rendering.UIEntity;
+import jGameLib.ui2d.utils.PositionAnimationComponent;
 
 import java.awt.*;
 

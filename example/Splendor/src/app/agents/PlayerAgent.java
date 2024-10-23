@@ -3,7 +3,7 @@ package app.agents;
 import app.backend.Game;
 import app.backend.Player;
 import app.backend.PlayerTurnAction;
-import jGameLib.ecs.GameState;
+import jGameLib.core.GameState;
 
 public abstract class PlayerAgent {
     public final Player player;

@@ -3,11 +3,11 @@ package app.frontend;
 import app.backend.Card;
 import app.backend.CardDeck;
 import app.backend.CardTier;
-import jGameLib.ecs.GameState;
-import jGameLib.ecs.ui2d.rendering.UIEntity;
-import jGameLib.ecs.ui2d.rendering.UIRendererComponent;
-import jGameLib.math.Vec2;
-import jGameLib.math.Vec2i;
+import jGameLib.core.GameState;
+import jGameLib.ui2d.rendering.UIEntity;
+import jGameLib.ui2d.rendering.UIRendererComponent;
+import jGameLib.util.math.Vec2;
+import jGameLib.util.math.Vec2i;
 
 public class CardDeckEntity extends UIEntity {
     private final CardDeck deck;

@@ -1,12 +1,12 @@
 package app.frontend;
 
 import app.backend.CardTier;
-import jGameLib.ecs.GameState;
-import jGameLib.ecs.ui2d.rendering.UIEntity;
-import jGameLib.ecs.ui2d.utils.RectRendererComponent;
-import jGameLib.ecs.ui2d.utils.TextRendererComponent;
-import jGameLib.ecs.ui2d.utils.TextStyle;
-import jGameLib.ecs.ui2d.utils.TextStyleBuilder;
+import jGameLib.core.GameState;
+import jGameLib.ui2d.rendering.UIEntity;
+import jGameLib.ui2d.utils.RectRendererComponent;
+import jGameLib.ui2d.utils.TextRendererComponent;
+import jGameLib.ui2d.utils.TextStyle;
+import jGameLib.ui2d.utils.TextStyleBuilder;
 
 import java.awt.*;
 

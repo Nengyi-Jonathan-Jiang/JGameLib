@@ -1,10 +1,10 @@
 package app.frontend.components;
 
-import jGameLib.ecs.ui2d.JGraphics;
-import jGameLib.ecs.ui2d.utils.CacheableRendererComponent;
-import jGameLib.ecs.ui2d.utils.RectRendererComponent;
-import jGameLib.math.Vec2;
-import jGameLib.math.Vec2i;
+import jGameLib.ui2d.JGraphics;
+import jGameLib.ui2d.utils.CacheableRendererComponent;
+import jGameLib.ui2d.utils.RectRendererComponent;
+import jGameLib.util.math.Vec2;
+import jGameLib.util.math.Vec2i;
 import jGameLib.util.Pair;
 
 import java.awt.*;

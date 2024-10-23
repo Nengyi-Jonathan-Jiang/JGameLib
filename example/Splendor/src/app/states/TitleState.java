@@ -4,12 +4,12 @@ import app.backend.CardDeck;
 import app.backend.Gem;
 import app.frontend.CardDeckEntity;
 import app.frontend.GemEntity;
-import jGameLib.ecs.ui2d.input.MouseEvent;
-import jGameLib.ecs.ui2d.input.UserInputHandlerEntity;
-import jGameLib.ecs.ui2d.rendering.UIEntity;
-import jGameLib.ecs.ui2d.rendering.UIRendererRootComponent;
-import jGameLib.ecs.ui2d.utils.RectRendererComponent;
-import jGameLib.math.Vec2i;
+import jGameLib.ui2d.input.MouseEvent;
+import jGameLib.ui2d.input.UserInputHandlerEntity;
+import jGameLib.ui2d.rendering.UIEntity;
+import jGameLib.ui2d.rendering.UIRendererRootComponent;
+import jGameLib.ui2d.utils.RectRendererComponent;
+import jGameLib.util.math.Vec2i;
 
 import java.awt.*;
 

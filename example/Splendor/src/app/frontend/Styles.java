@@ -1,7 +1,6 @@
 package app.frontend;
 
-import jGameLib.math.Vec2;
-import jGameLib.util.FontLoader;
+import jGameLib.util.files.FontLoader;
 
 import java.awt.*;
 

@@ -1,6 +1,6 @@
 package app.states;
 
-import jGameLib.ecs.GameState;
+import jGameLib.core.GameState;
 
 import java.util.Iterator;
 

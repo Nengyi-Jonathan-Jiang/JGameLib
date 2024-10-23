@@ -1,7 +1,7 @@
 package app.frontend.components;
 
-import jGameLib.ecs.ui2d.utils.HoverDetectionComponent;
-import jGameLib.math.Vec2;
+import jGameLib.ui2d.utils.HoverDetectionComponent;
+import jGameLib.util.math.Vec2;
 
 /**
  * ButtonComponent but culled to a circle shape
