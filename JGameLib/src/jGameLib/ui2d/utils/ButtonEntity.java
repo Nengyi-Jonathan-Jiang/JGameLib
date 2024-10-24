@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ButtonEntity extends UIEntity {
     public final TextRendererComponent textRendererComponent = new TextRendererComponent("");
     public final HoverDetectionComponent hoverDetectionComponent = new HoverDetectionComponent();

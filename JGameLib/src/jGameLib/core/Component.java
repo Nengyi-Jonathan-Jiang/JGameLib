@@ -5,6 +5,7 @@ import java.util.Objects;
 /**
  * An abstract Component class.
  */
+@SuppressWarnings("unused")
 public abstract class Component {
     protected Entity entity;
 

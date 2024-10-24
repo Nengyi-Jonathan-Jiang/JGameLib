@@ -12,6 +12,7 @@ import java.util.Collection;
 /**
  * A utility class to manage background music.
  */
+@SuppressWarnings("unused")
 public class BackgroundMusicSystem extends JSystem {
     private @NotNull Sound currSound = Sound.SILENCE;
     private boolean isMuted = true;
@@ -99,6 +100,12 @@ public class BackgroundMusicSystem extends JSystem {
 
     @Override
     public void applyAction(Collection<Entity> e, GameState currentState) {
-
+        if(e.isEmpty()) {
+            // Stop all music
+        }
+        if(e.size() > 1) {
+            throw new RuntimeException("More than one background music entity found");
+        }
+        // Play the sound
     }
 }

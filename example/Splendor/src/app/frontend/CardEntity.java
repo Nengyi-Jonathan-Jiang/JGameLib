@@ -98,14 +98,14 @@ public class CardEntity extends UIEntity {
 
         Arrays.stream(Gem.values())
             .map(i -> new Pair<>(i, card.cost(i)))
-            .filter(i -> i.b != 0)
+            .filter(i -> i.b() != 0)
             .forEachOrdered((p) -> {
                 UIEntity x = new UIEntity(state, new Vec2(30, 30))
                     .addComponent(new CircleRendererComponent(
-                        p.a.getColor(), null
+                        p.a().getColor(), null
                     ))
                     .addComponent(
-                        new TextRendererComponent(p.b.toString())
+                        new TextRendererComponent(p.b().toString())
                             .setStyle(
                                 new TextStyleBuilder()
                                     .setFont("fonts/Nunito.ttf")

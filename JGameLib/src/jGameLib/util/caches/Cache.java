@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 /**
  * A cache, used to store the results of expensive computations.
  */
+@SuppressWarnings("unused")
 public class Cache<K, V> {
     protected final Map<K, V> backingMap;
 
