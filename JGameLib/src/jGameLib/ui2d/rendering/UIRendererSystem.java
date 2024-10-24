@@ -27,7 +27,7 @@ public class UIRendererSystem extends JSystem {
     private List<UIRendererComponent> drawOrder = new ArrayList<>();
 
     @Override
-    public void applyAction(Collection<Entity> entities, GameState currentState) {
+    public synchronized void applyAction(Collection<Entity> entities, GameState currentState) {
         recalculateProcessingOrders(entities);
 
         updateOrder.forEach(UIRendererComponent::update);
@@ -36,7 +36,7 @@ public class UIRendererSystem extends JSystem {
         canvas.repaint(this::redraw);
     }
 
-    private void recalculateProcessingOrders(Collection<Entity> entities) {
+    private synchronized void recalculateProcessingOrders(Collection<Entity> entities) {
         List<BoundingBoxComponent> boundingBoxes = new ArrayList<>();
         entities.stream()
             .map(i -> i.getComponent(BoundingBoxComponent.class))
@@ -50,7 +50,7 @@ public class UIRendererSystem extends JSystem {
         addToDrawOrder(boundingBoxes);
     }
 
-    private void addToUpdateOrder(BoundingBoxComponent boundingBox) {
+    private synchronized void addToUpdateOrder(BoundingBoxComponent boundingBox) {
         if (boundingBox.getEntity().isEnabled() && boundingBox.isEnabled()) {
             // Update children first
             boundingBox.getChildren().forEach(this::addToUpdateOrder);
@@ -61,7 +61,7 @@ public class UIRendererSystem extends JSystem {
         }
     }
 
-    private void addToDrawOrder(List<BoundingBoxComponent> boundingBoxes) {
+    private synchronized void addToDrawOrder(List<BoundingBoxComponent> boundingBoxes) {
         List<BoundingBoxComponent> b = new ArrayList<>(boundingBoxes);
         // Sort by render order
         b.sort(Comparator.comparingDouble(BoundingBoxComponent::getRenderOrder));
@@ -79,7 +79,7 @@ public class UIRendererSystem extends JSystem {
             });
     }
 
-    private void redraw(JGraphics graphics) {
+    private synchronized void redraw(JGraphics graphics) {
         drawOrder.forEach(component -> component.draw(graphics));
     }
 }

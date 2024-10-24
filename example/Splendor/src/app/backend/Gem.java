@@ -3,10 +3,10 @@ package app.backend;
 import java.awt.*;
 
 public enum Gem {
+    BLACK,
     RED,
     GREEN,
     BLUE,
-    BLACK,
     WHITE;
 
     public Color getColor() {

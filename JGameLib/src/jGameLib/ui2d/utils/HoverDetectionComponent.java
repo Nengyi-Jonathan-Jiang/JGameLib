@@ -13,6 +13,19 @@ import org.jetbrains.annotations.NotNull;
 public class HoverDetectionComponent extends Component {
     @SuppressWarnings("DataFlowIssue")
     protected @NotNull BoundingBoxComponent boundingBox = null;
+    protected boolean isEnabled;
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void enable() {
+        isEnabled = true;
+    }
+
+    public void disable() {
+        isEnabled = false;
+    }
 
     public HoverDetectionComponent() {
     }
@@ -37,6 +50,6 @@ public class HoverDetectionComponent extends Component {
      * @return Whether the current mouse position is over the ecs.GameObject
      */
     public final boolean isHovered(UserInputState userInputState) {
-        return contains(userInputState.getMousePosition());
+        return isEnabled && contains(userInputState.getMousePosition());
     }
 }

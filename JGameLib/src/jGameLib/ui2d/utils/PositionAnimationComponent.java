@@ -8,18 +8,26 @@ import jGameLib.util.math.Vec2;
 public class PositionAnimationComponent extends UIRendererComponent {
     private Vec2 startPosition;
     private Vec2 targetPosition;
-    private double elapsedTime;
-    private double animationDuration;
+    private double elapsedTime = 0;
+    private double animationDuration = 0;
 
     @Override
     public void update() {
-        if (elapsedTime >= animationDuration) return;
+        if (!isAnimating()) return;
         elapsedTime += 1;
 
-        Vec2 fullDistance = targetPosition.minus(startPosition);
-        Vec2 progress = fullDistance.times(elapsedTime / animationDuration);
+        double t = elapsedTime / animationDuration;
+        entity.getComponent(BoundingBoxComponent.class).setRelativePosition(
+            Vec2.smoothInterpolate(
+                startPosition,
+                targetPosition,
+                t
+            )
+        );
+    }
 
-        entity.getComponent(BoundingBoxComponent.class).setRelativePosition(startPosition.plus(progress));
+    public boolean isAnimating() {
+        return elapsedTime < animationDuration;
     }
 
     public void moveTo(Vec2 targetPosition, double animationDurationInFrames) {

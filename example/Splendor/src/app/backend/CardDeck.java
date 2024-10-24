@@ -10,8 +10,9 @@ import java.util.Scanner;
 public class CardDeck {
     public static final int FACE_UP_CAPACITY = 4;
     public static final int NUM_TIERS = CardTier.values().length;
+    public static final int NUM_NOBLES = 5;
 
-    private static final Card[] allCardsList;
+    private static final Card[] allCardsArr;
     static {
         List<Card> cards = new ArrayList<>();
         Scanner scan = new Scanner(FileUtil.readFileAsText("cards.txt"));
@@ -36,25 +37,48 @@ public class CardDeck {
             cards.add(new Card(cost, tier, resourceType, prestige));
         }
 
-        allCardsList = cards.toArray(Card[]::new);
+        allCardsArr = cards.toArray(Card[]::new);
+    }
+    private static final Noble[] allNoblesArr;
+
+    static {
+        List<Noble> nobles = new ArrayList<>();
+        Scanner scan = new Scanner(FileUtil.readFileAsText("nobles.txt"));
+        while (scan.hasNextInt()) {
+            Multiset<Gem> cost = new Multiset<>();
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.BLACK);
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.WHITE);
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.RED);
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.BLUE);
+            for (int N = scan.nextInt(); N-- > 0; ) cost.add(Gem.GREEN);
+
+            nobles.add(new Noble(cost));
+        }
+
+        allNoblesArr = nobles.toArray(Noble[]::new);
     }
 
     @SuppressWarnings("unchecked")
     private final List<Card>[] deck = new List[NUM_TIERS];
     public final Card[][] faceUpCards = new Card[NUM_TIERS][FACE_UP_CAPACITY];
+    public final Noble[] nobles;
 
     public CardDeck() {
-        this(List.of(allCardsList));
+        this(List.of(allCardsArr), List.of(allNoblesArr));
     }
 
-    public CardDeck(List<Card> allCards) {
+    public CardDeck(List<Card> allCards, List<Noble> nobles) {
         for (int i = 0; i < NUM_TIERS; i++) {
             deck[i] = new ArrayList<>();
         }
 
-        List<Card> shuffled = new ArrayList<>(allCards);
-        Collections.shuffle(shuffled);
-        for (Card card : shuffled) {
+        List<Noble> shuffledNobles = new ArrayList<>(nobles);
+        Collections.shuffle(shuffledNobles);
+        this.nobles = shuffledNobles.subList(0, NUM_NOBLES).toArray(Noble[]::new);
+
+        List<Card> shuffledCards = new ArrayList<>(allCards);
+        Collections.shuffle(shuffledCards);
+        for (Card card : shuffledCards) {
             deck[card.tier.ordinal()].add(card);
         }
 
@@ -68,6 +92,7 @@ public class CardDeck {
             for (int j = 0; j < tierCards.length && !tierDeck.isEmpty(); j++) {
                 if (tierCards[j] == null) {
                     tierCards[j] = tierDeck.removeLast();
+                    return;
                 }
             }
         }

@@ -4,11 +4,13 @@ import app.backend.CardDeck;
 import app.backend.Gem;
 import app.frontend.CardDeckEntity;
 import app.frontend.GemEntity;
+import jGameLib.ui2d.input.KeyEvent;
 import jGameLib.ui2d.input.MouseEvent;
 import jGameLib.ui2d.input.UserInputHandlerEntity;
 import jGameLib.ui2d.rendering.UIEntity;
 import jGameLib.ui2d.rendering.UIRendererRootComponent;
 import jGameLib.ui2d.utils.RectRendererComponent;
+import jGameLib.util.math.Vec2;
 import jGameLib.util.math.Vec2i;
 
 import java.awt.*;
@@ -26,6 +28,7 @@ public class TitleState extends BasicState {
 
         CardDeck deck = new CardDeck();
         CardDeckEntity cardDeckEntity = new CardDeckEntity(this, deck)
+            .withBoundingBox(b -> b.setTopRight(new Vec2(940, -520)))
             .addComponent(new UIRendererRootComponent())
             .cast();
 
@@ -40,7 +43,13 @@ public class TitleState extends BasicState {
                     }
                 }
             }
+
+            @Override
+            protected void onKeyDown(KeyEvent ke) {
+                if(ke.key() == KeyEvent.Key.K_R) {
+                    setNextState(new TitleState());
+                }
+            }
         };
     }
-
 }
