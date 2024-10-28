@@ -48,7 +48,7 @@ public final class BoundingBoxComponent extends Component {
         children.stream().map(Component::getEntity).toList().forEach(Entity::destroy);
     }
 
-    public void setRenderOrder(int renderOrder) {
+    public void setRenderOrder(double renderOrder) {
         this.renderOrder = renderOrder;
     }
 

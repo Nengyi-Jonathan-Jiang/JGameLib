@@ -2,3 +2,4 @@
 /example
 # Project exclude paths
 /JGameLib/javadoc/
+/.idea/vcs.xml

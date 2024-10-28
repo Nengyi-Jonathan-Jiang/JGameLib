@@ -104,6 +104,8 @@ public class UserInputSystem extends JSystem {
             .map(i -> i.getComponent(UserInputHandlerComponent.class))
             .toList();
 
+        apply(components, state, UserInputHandlerComponent::update);
+
         for (MouseEvent me; (me = mouseEvents.poll()) != null; ) {
             switch (me.mouseEventType()) {
                 case MOUSE_DOWN -> apply(components, me, UserInputHandlerComponent::onMouseDown);
@@ -121,8 +123,6 @@ public class UserInputSystem extends JSystem {
         if (wheelMovement != 0) {
             apply(components, wheelMovement, UserInputHandlerComponent::onScroll);
         }
-
-        apply(components, state, UserInputHandlerComponent::update);
 
         mouseEvents.clear();
         keyEvents.clear();
