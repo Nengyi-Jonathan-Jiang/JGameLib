@@ -206,4 +206,9 @@ public abstract class GameState {
             ) +
             "}";
     }
+
+    @SuppressWarnings("unchecked")
+    public <T extends GameState> T cast(Class<T> cls) {
+        return (T) this;
+    }
 }
